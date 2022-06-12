@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '0.01'
+
+compileJava {
+    options.compilerArgs << "-Xlint:all"
+}
+
+repositories {
+    mavenCentral ()
+}
+
+dependencies {
+    //testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    //testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    //Socket
+    implementation group: 'io.netty', name: 'netty-all', version: 'latest.release'
+
+    //Database
+    implementation group: 'mysql', name: 'mysql-connector-java', version: 'latest.release'
+    implementation group: 'com.zaxxer', name: 'HikariCP', version:'latest.release'
+
+    //Hardware
+    implementation group: 'com.github.oshi', name: 'oshi-core', version:'latest.release'
+
+    //Loggers
+    implementation group: 'org.slf4j', name: 'slf4j-api', version:'latest.release'
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version:'latest.release'
+    implementation group: 'log4j', name: 'log4j', version:'latest.release'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar { //packing
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect {
+            zipTree it
+        }
+    }
+
+    manifest {
+        attributes 'Main-Class' : 'l1j.Main'
+    }
+}
+
+buildDir = 'dist'
